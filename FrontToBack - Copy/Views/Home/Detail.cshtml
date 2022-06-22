@@ -1,0 +1,14 @@
+﻿@using Faker.Extensions
+@model Product
+@{
+    ViewData["Title"] = "Detail";
+}
+
+            <div class="container">
+                <div class="row pt-5 d-flex flex-column">
+                    <h1>@Model.Name</h1>
+                    <img src="~/img/@Model.ImageUrl" width="300" class="img-fluid" alt="">
+                    <p class="w-25">@Faker.Lorem.Paragraph() </p>
+                
+                </div>    
+            </div>
