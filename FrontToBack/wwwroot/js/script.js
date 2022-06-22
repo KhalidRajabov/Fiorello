@@ -1,5 +1,21 @@
 $(document).ready(function () {
 
+
+    //search
+
+    $(document).on("keyup", "#input-search", function () {
+        let inputValue = $(this).val();
+        $("#SearchList li").slice(1).remove();
+        $("#SearchList").html()
+        $.ajax({
+            url: "home/searchProduct?search="+inputValue,
+            method: "get",
+            success: function (res) {
+                $("#SearchList").append(res);
+            }
+        })
+    })
+
     // HEADER
 
     $(document).on('click', '#search', function () {
