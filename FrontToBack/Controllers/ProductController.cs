@@ -19,11 +19,15 @@ namespace FrontToBack.Controllers
         public IActionResult Index()
         {
             List<Product> products = _context.Products.Take(2).Include(p=>p.Category).ToList();
+            ViewBag.ProductCount = _context.Products.Count();
             return View(products);
         }
 
-        public IActionResult LoadMore()
+        public IActionResult LoadMore(int skip)
         {
+
+
+            #region JsonOfDatabase
             /*List<Product> products = _context.Products.Skip(2).Take(2).Include(p => p.Category).ToList();
             List<ProductReturnVM> returnedproduct = new List<ProductReturnVM>();
             foreach (var item in products)
@@ -46,8 +50,13 @@ namespace FrontToBack.Controllers
                             Category = p.Category.Name
                         }).ToList();*/
 
-            //List<Product> products = _context.Products.Skip(2).Take(2).Include(p => p.Category).ToList();
-            return View();
+            #endregion
+
+
+
+            List<Product> products = _context.Products.Skip(skip).Take(2).Include(p => p.Category).ToList();
+
+            return PartialView("_PartialView", products);
         }
     }
 }
