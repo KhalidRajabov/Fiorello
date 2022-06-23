@@ -22,5 +22,7 @@ namespace FrontToBack
         public DbSet <AuthorSlider> AuthorSliders { get; set; }
 
         public DbSet<BottomSlider> BottomSliders { get; set; }
+
+        public DbSet<Bio> Bios { get; set; }
     }
 }
