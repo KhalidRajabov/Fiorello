@@ -138,9 +138,9 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item my-auto shop-cart">
-                                    <i class="fas fa-shopping-bag"></i>
-                                    <sup class="rounded-circle">0</sup>
-                                    <span>CART ($0)</span>
+                                    <a asp-controller="basket" asp-action="showitem"><i class="fas fa-shopping-bag"></i></a>
+                                    <sup class="rounded-circle">@ViewBag.BasketCount</sup>
+                                    <span>CART ($@ViewBag.TotalPrice)</span>
                                     <ul class="list-unstyled py-3">
                                         <li class="">No products in the cart.</li>
                                     </ul>
