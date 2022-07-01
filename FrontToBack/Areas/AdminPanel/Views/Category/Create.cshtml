@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+
+
+     <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Create Table</h4>
+                  <form class="forms-sample" method="POST">
+
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">Table name</label>
+                      <input name="Name" type="text" class="form-control" id="exampleInputUsername1" placeholder="Name">
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="exampleInputUsername2">Table description</label>
+                      <input name="Desc" width="100%" type="text" class="form-control" style="padding: 10px 0px 70px 10px;" id="exampleInputUsername2" placeholder="Description">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    <button asp-controller="category" asp-action="index" class="btn btn-success"> Go Back</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+
+</div>
+
