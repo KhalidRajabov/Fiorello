@@ -392,14 +392,14 @@
         <ul class="nav">
           <li class="nav-item">
             <a class="nav-link" asp-controller="dashboard" asp-action="index">
-              <i class="mdi mdi-grid-large menu-icon"></i>
+              <i  class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" asp-controller="category" asp-action="index">
-              <i class="mdi mdi-grid-large menu-icon"></i>
-              <span class="menu-title">Category</span>
+              <i style="font-size:180%" class="mdi mdi-format-list-bulleted-type"></i>
+              <span style="margin-left: 16px" class="menu-title">Category</span>
             </a>
           </li>
           <li class="nav-item nav-category">UI Elements</li>
@@ -531,6 +531,8 @@
   <script src="~/admin/js/jquery.cookie.js" type="text/javascript"></script>
   <script src="~/admin/js/dashboard.js"></script>
   <script src="~/admin/js/Chart.roundedBarCharts.js"></script>
+
+  @RenderSection("JqueryValidationScript", false);
   <!-- End custom js for this page-->
 </body>
 

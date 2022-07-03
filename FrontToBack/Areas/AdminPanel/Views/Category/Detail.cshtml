@@ -11,10 +11,10 @@
                     <div class="card-body">
                       <h4 class="card-title">@Model.Name</h4>
                       <p>
-                          @Model.Desc
+                          @Html.Raw(Model.Desc)
                       </p>
                     </div>
-                <button style="align-self:center;" asp-action="index" class="btn btn-info w-25">Go Back</button>
+                <a style="align-self:center; margin-bottom: 40px; margin-top: 40px;" asp-controller="category" asp-action="index" class="btn btn-info w-25">Go Back</a>
                   </div>
                 </div>
 

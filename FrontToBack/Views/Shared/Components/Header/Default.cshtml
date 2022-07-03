@@ -26,7 +26,7 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Pages</a>
+                                    <a class="nav-link" asp-area="adminpanel" asp-controller="dashboard" asp-action="index">admin</a>
                                     <ul class="list-unstyled py-3">
                                         <li class=""><a class="px-1" href="">Page 1</a></li>
                                         <li class=""><a class="px-1" href="">Page 2</a></li>
@@ -160,7 +160,7 @@
                         <li class=""><a class="px-1" href="">Home 2</a></li>
                         <li class=""><a class="px-1" href="">Home 3</a></li>
                     </ul>
-                    <li><a href="#">Pages <i class="fas fa-caret-right fa-sm"></i></a></li>
+                    <li><a asp-controller="dashboard" asp-action="index">Admin Panel<i class="fas fa-caret-right fa-sm"></i></a></li>
                     <ul class="list-unstyled">
                         <li class=""><a class="px-1" href="">Page 1</a></li>
                         <li class=""><a class="px-1" href="">Page 2</a></li>

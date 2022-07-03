@@ -31,13 +31,56 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Category category)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Category category)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            return Content($"{category.Name}, {category.Desc}");
+
+            bool isValid = _context.Categories.Any(c=> c.Name.ToLower()==category.Name.ToLower());
+            if (isValid)
+            {
+                ModelState.AddModelError("Name", "This category name already exists");
+                return View();
+            }
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Update(int? id)
+        {
+            if (id == null) return NotFound();
+            Category category = await _context.Categories.FindAsync(id);
+            if (category == null) return NotFound();
+            return View(category);   
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int? id,Category category)
+        {
+            if (!ModelState.IsValid) return View();
+            if (id == null) return NotFound();
+            Category dbCategory = await _context.Categories.FindAsync(id);
+            if(dbCategory == null) return NotFound();
+            Category checkCategory = _context.Categories.FirstOrDefault(c => c.Name.ToLower() == category.Name.ToLower());
+            if (checkCategory!=null)
+            {
+                if (dbCategory.Name!=checkCategory.Name)
+                {
+                    ModelState.AddModelError("Name", "This category name already exists");
+                    return View();
+                }
+            }
+            dbCategory.Name = category.Name;
+            dbCategory.Desc = category.Desc;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("index");
         }
 
         public async Task<IActionResult> Detail(int? id)
