@@ -58,6 +58,28 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             return View(category);   
         }
 
+        
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+            Category category = await _context.Categories.FindAsync(id);
+            if (category == null) return NotFound();
+            return View(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteCategory(int? id)
+        {
+            if(id == null) return NotFound();
+            Category category = await _context.Categories.FindAsync(id);
+            if (category == null) return NotFound();
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("index");
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
