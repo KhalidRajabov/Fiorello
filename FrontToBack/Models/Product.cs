@@ -11,7 +11,6 @@ namespace FrontToBack.Models
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         [NotMapped]
-        [Required]
         public IFormFile Photo { get; set; }
         [Required(ErrorMessage = "Can not be empty")]
         public double Price { get; set; }

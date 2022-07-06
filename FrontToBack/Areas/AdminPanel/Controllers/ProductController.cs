@@ -86,7 +86,69 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             return RedirectToAction("index");
         }
 
-        
+
+        public async Task<IActionResult> Update(int? id)
+        {
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+            if (id == null) return NotFound();
+            Product product= await _context.Products.FindAsync(id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int? id,Product product)
+        {
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+            if (!ModelState.IsValid) return View();
+            if (id == null) return NotFound();
+            Product dbProduct = await _context.Products.FindAsync(id);
+            if (dbProduct == null) return NotFound();
+         
+            if (product.Photo == null)
+            {
+                dbProduct.ImageUrl= dbProduct.ImageUrl;
+            }
+            else
+            {
+                if (!product.Photo.IsImage())
+                {
+                    ModelState.AddModelError("Photo", "Do not leave it empty");
+                    return View();
+                }
+                if (product.Photo.ValidSize(10000))
+                {
+                    ModelState.AddModelError("Photo", "Image size can not be large");
+                    return View();
+                }
+                string oldImg = product.ImageUrl;
+                string path = Path.Combine(_env.WebRootPath, "img", oldImg);
+                dbProduct.ImageUrl = product.Photo.SaveImage(_env, "img");
+                Helper.Helper.DeleteImage(path);
+
+            }
+
+
+
+
+            dbProduct.Name = product.Name;
+            dbProduct.Price= product.Price;
+            dbProduct.Count = product.Count;
+            dbProduct.CategoryId= product.CategoryId;
+           
+
+            //await _context.AddAsync(dbProduct);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("index");
+        }
+
+
+
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
