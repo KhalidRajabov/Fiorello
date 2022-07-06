@@ -125,7 +125,7 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
                     ModelState.AddModelError("Photo", "Image size can not be large");
                     return View();
                 }
-                string oldImg = product.ImageUrl;
+                string oldImg = dbProduct.ImageUrl;
                 string path = Path.Combine(_env.WebRootPath, "img", oldImg);
                 dbProduct.ImageUrl = product.Photo.SaveImage(_env, "img");
                 Helper.Helper.DeleteImage(path);
