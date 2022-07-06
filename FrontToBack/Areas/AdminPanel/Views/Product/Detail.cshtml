@@ -1,0 +1,28 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+
+
+
+                <div class="card mb-3" style="max-width: 540px;">
+  <div style="padding: 15px" class="row g-0">
+    <div class="col-md-4">
+      <img src="~/img/@Model.ImageUrl" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">Price: $@Model.Price</p>
+        <p class="card-text"><small class="text-muted">Category: @Model.Category.Name</small></p>
+        <p class="card-text"><small class="text-muted">Count: @Model.Count</small></p>
+      </div>
+    </div>
+    <a style="align-self:center; margin-bottom: 40px; margin-top: 40px;" asp-action="index" class="btn btn-info w-25">Go Back</a>
+  </div>
+</div>
+
+</div>
