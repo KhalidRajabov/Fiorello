@@ -1,4 +1,5 @@
-﻿using FrontToBack.Models;
+﻿using FrontToBack.Extensions;
+using FrontToBack.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -52,12 +53,12 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
                 return View();
             }
 
-            if (!product.Photo.ContentType.Contains("image/"))
+            if (!product.Photo.IsImage())
             {
                 ModelState.AddModelError("Photo", "Do not leave it empty");
                 return View();
             }
-            if (product.Photo.Length/1024>200)
+            if (product.Photo.ValidSize(10000))
             {
                 ModelState.AddModelError("Photo", "Image size can not be large");
                 return View();
@@ -68,24 +69,33 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
                 return View();
             }
 
-            string filename = Guid.NewGuid().ToString() + product.Photo.FileName;
-            string path = Path.Combine(_env.WebRootPath, "img", filename);
-            using (FileStream stream = new FileStream(path, FileMode.Create))
-            {
-                product.Photo.CopyTo(stream);
-            };
+            
 
             Product NewProduct = new Product
             {
                 Price = product.Price,
                 Name = product.Name,
                 CategoryId = product.CategoryId,
-                ImageUrl = filename
+                Count = product.Count,
+                ImageUrl = product.Photo.SaveImage(_env, "img")
             };
 
             _context.Products.Add(NewProduct);
             _context.SaveChanges();
 
+            return RedirectToAction("index");
+        }
+
+        
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+            Product product= await _context.Products.FindAsync(id);
+            if (product== null) return NotFound();
+            string path = Path.Combine(_env.WebRootPath, "img", product.ImageUrl);
+            Helper.Helper.DeleteImage(path);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
             return RedirectToAction("index");
         }
     }
