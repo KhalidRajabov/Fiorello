@@ -14,7 +14,7 @@
                   <h4 class="card-title">Create Product</h4>
 
                   <div class="col-md-4">
-                  <img src="~/img/@Model.ImageUrl" class="img-fluid rounded-start" alt="...">
+                  <img src="~/img/@Model.ImageUrl" class="img-fluid rounded-start">
                   </div>
 
                   <form class="forms-sample" method="POST" enctype="multipart/form-data">
@@ -27,7 +27,7 @@
                     
                     <div class="form-group">
                       <label asp-for="Price"></label>
-                      <input asp-for="Price" class="form-control" placeholder="price">
+                      <input asp-for="Price" class="form-control" placeholder="Price">
                       <span style="color: red;" asp-validation-for="Price"></span>
                     </div>
 

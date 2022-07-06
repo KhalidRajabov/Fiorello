@@ -1,0 +1,20 @@
+﻿@model Slider
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Detail</h1>
+
+<div class="row">
+
+    <div class="col-md-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <img style="width: 100%" src="~/img/@Model.ImageUrl"/>
+                    </div>
+                <a style="align-self:center; margin-bottom: 40px; margin-top: 40px;" asp-controller="slider" asp-action="index" class="btn btn-info w-25">Go Back</a>
+                  </div>
+                </div>
+
+</div>

@@ -117,10 +117,10 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             {
                 if (!product.Photo.IsImage())
                 {
-                    ModelState.AddModelError("Photo", "Do not leave it empty");
+                    ModelState.AddModelError("Photo", "Choose images only");
                     return View();
                 }
-                if (product.Photo.ValidSize(10000))
+                if (product.Photo.ValidSize(20000))
                 {
                     ModelState.AddModelError("Photo", "Image size can not be large");
                     return View();
