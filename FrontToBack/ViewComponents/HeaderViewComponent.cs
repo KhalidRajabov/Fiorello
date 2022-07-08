@@ -1,5 +1,6 @@
 ﻿using FrontToBack.Models;
 using FrontToBack.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -11,14 +12,22 @@ namespace FrontToBack.ViewComponents
     public class HeaderViewComponent:ViewComponent
     {
         private readonly AppDbContext _context;
-
-        public HeaderViewComponent(AppDbContext context)
+        private readonly UserManager<AppUser> _userManager; 
+        public HeaderViewComponent(AppDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            ViewBag.User = "Login";
+            if (User.Identity.IsAuthenticated)
+            {
+                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+                ViewBag.User = user.FullName;
+                
+            }
             ViewBag.BasketCount = 0;
             ViewBag.TotalPrice = 0;
             int TotalCount = 0;

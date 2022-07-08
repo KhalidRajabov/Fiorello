@@ -1,4 +1,4 @@
-﻿
+﻿@model LoginVM
 @{
     Layout = null;
 }
@@ -35,16 +35,18 @@
                   <p class="card-description">
                     Use the <code>.form-inline</code> class to display a series of labels, form controls, and buttons on a single horizontal row
                   </p>
-                  <form class="form-inline">
-                    <label class="sr-only" for="inlineFormInputName2">Name</label>
-                    <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Jane Doe">
-                  
-                    <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
-                    <div class="input-group mb-2 mr-sm-2">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text"></div>
-                      </div>
-                      <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Username">
+                  <form class="form-inline" method="post">
+                      <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                      <div class="input-group d-flex flex-column mb-2 mr-sm-2">
+                    <label class="sr-only" asp-for="Email"></label>
+                    <input class="form-control mb-2 mr-sm-2 w-50" asp-for="Email" placeholder="Email:">
+                  <span asp-validation-for="Email" class="text-danger"></span>
+                  </div>
+
+                    <div class="input-group d-flex flex-column mb-2 mr-sm-2">
+                    <label class="sr-only" asp-for="Password"></label>
+                      <input asp-for="Password" class="form-control  w-50" placeholder="Password:">
+                      <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-check mx-sm-2">
                       <label class="form-check-label">
@@ -52,7 +54,7 @@
                         Remember me
                       </label>
                     </div>
-                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                    <button type="submit" class="btn btn-primary mb-2">Login</button>
                   </form>
                 </div>
               </div>

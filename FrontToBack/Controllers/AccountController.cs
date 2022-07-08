@@ -3,6 +3,7 @@ using FrontToBack.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace FrontToBack.Controllers
 {
@@ -52,12 +53,46 @@ namespace FrontToBack.Controllers
                 }
                 return View(registerVM);
             }
+            await _signInManager.SignInAsync(appUser, isPersistent: true);
             return RedirectToAction("Index", "home");
         }
 
         public IActionResult Login()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginVM loginvm)
+        {
+            if (!ModelState.IsValid) return View();
+            AppUser appUser = await _usermanager.FindByEmailAsync(loginvm.Email);
+            if (appUser == null) 
+            {
+                ModelState.AddModelError("", "Email or password is wrong"); 
+                return View(loginvm); 
+            }
+
+            SignInResult result = await _signInManager.PasswordSignInAsync(appUser, loginvm.Password, true, true);
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError("", "Your account is blocked");
+                return View(loginvm);
+            }
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Email or password is wrong");
+                return View(loginvm);
+            }
+            return RedirectToAction("index", "home");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("login");
         }
     }
 }
