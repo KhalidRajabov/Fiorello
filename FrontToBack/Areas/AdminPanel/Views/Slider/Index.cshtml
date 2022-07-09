@@ -10,10 +10,17 @@
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Hoverable Table</h4>
-                  <p class="card-description">
+                  @if (Model.Count()<6)
+                {
+                    <p class="card-description">
                     <a class="btn btn-info fs-5"  asp-action="create">Add Image</a>
-                  </p>
-                  <div class="table-responsive">
+                    </p>
+                }
+                else
+                {
+                    <div class="row bg-danger text-white align-items-center"><p style="padding:10px; font-size: 120%">You have the maximum amount of images for slider</p></div>
+                }
+                <div class="table-responsive">
                     <table class="table table-hover">
                       <thead>
                         <tr>

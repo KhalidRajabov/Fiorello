@@ -46,7 +46,7 @@ namespace FrontToBack
                 opt.Lockout.AllowedForNewUsers=true;
                 opt.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(5);
 
-            }).AddEntityFrameworkStores<AppDbContext>();
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

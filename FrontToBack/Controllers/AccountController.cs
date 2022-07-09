@@ -92,7 +92,7 @@ namespace FrontToBack.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("login");
+            return RedirectToAction("index", "home");
         }
     }
 }
