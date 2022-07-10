@@ -1,5 +1,6 @@
 ﻿using FrontToBack.Models;
 using FrontToBack.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 
 namespace FrontToBack.Controllers
 {
+    
     public class ProductController : Controller
     {
         private readonly AppDbContext _context;
@@ -15,14 +17,14 @@ namespace FrontToBack.Controllers
         {
             _context = context;
         }
-
+        
         public IActionResult Index()
         {
             List<Product> products = _context.Products.Take(2).Include(p=>p.Category).ToList();
             ViewBag.ProductCount = _context.Products.Count();
             return View(products);
         }
-
+        
         public IActionResult LoadMore(int skip)
         {
 
@@ -58,7 +60,7 @@ namespace FrontToBack.Controllers
 
             return PartialView("_PartialView", products);
         }
-
+        
         public IActionResult Detail(int? id)
         {
             if (id==null)

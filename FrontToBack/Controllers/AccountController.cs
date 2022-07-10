@@ -14,7 +14,11 @@ namespace FrontToBack.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> usermanager, RoleManager<IdentityRole>roleManager, SignInManager<AppUser> signInManager)
+        public AccountController
+            (UserManager<AppUser> usermanager, 
+            RoleManager<IdentityRole>roleManager, 
+            SignInManager<AppUser> signInManager
+            )
         {
             _usermanager = usermanager;
             _roleManager = roleManager;
@@ -56,6 +60,7 @@ namespace FrontToBack.Controllers
                 }
                 return View(registerVM);
             }
+            await _usermanager.AddToRoleAsync(appUser, "Member");
             await _signInManager.SignInAsync(appUser, isPersistent: true);
             
             
@@ -82,7 +87,8 @@ namespace FrontToBack.Controllers
                 return View(loginvm); 
             }
 
-            SignInResult result = await _signInManager.PasswordSignInAsync(appUser, loginvm.Password, loginvm.RememberMe, true);
+            SignInResult result = await _signInManager
+                .PasswordSignInAsync(appUser, loginvm.Password, loginvm.RememberMe, true);
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError("", "Your account is blocked");
@@ -102,5 +108,24 @@ namespace FrontToBack.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
+
+        /*public async Task CreateRole()
+        {
+
+        ------- When needed a new role, uncomment this method and -------
+        ------- add a new role, then go to action in browser      -------
+
+
+
+
+            if (!await _roleManager.RoleExistsAsync("Admin"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+            }
+            if (!await _roleManager.RoleExistsAsync("Member"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole { Name = "Member" });
+            }
+        }*/
     }
 }

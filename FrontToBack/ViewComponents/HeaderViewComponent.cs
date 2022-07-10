@@ -25,7 +25,7 @@ namespace FrontToBack.ViewComponents
             if (User.Identity.IsAuthenticated)
             {
                 AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
-                ViewBag.User = user.FullName;
+                ViewBag.User = user.UserName;
                 
             }
             ViewBag.BasketCount = 0;
