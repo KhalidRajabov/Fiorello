@@ -82,7 +82,7 @@ namespace FrontToBack.Controllers
                 return View(loginvm); 
             }
 
-            SignInResult result = await _signInManager.PasswordSignInAsync(appUser, loginvm.Password, true, true);
+            SignInResult result = await _signInManager.PasswordSignInAsync(appUser, loginvm.Password, loginvm.RememberMe, true);
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError("", "Your account is blocked");

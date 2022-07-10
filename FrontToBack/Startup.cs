@@ -1,3 +1,4 @@
+using FrontToBack.Helper;
 using FrontToBack.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,11 +43,11 @@ namespace FrontToBack
                 opt.Password.RequireDigit = true;
 
                 opt.User.RequireUniqueEmail = true;
-                opt.Lockout.MaxFailedAccessAttempts=3;
-                opt.Lockout.AllowedForNewUsers=true;
-                opt.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(5);
+                opt.Lockout.MaxFailedAccessAttempts = 3;
+                opt.Lockout.AllowedForNewUsers = true;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 
-            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders().AddErrorDescriber<RegisterErrorMessages>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
