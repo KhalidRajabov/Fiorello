@@ -28,6 +28,7 @@ namespace FrontToBack.Controllers
 
         public IActionResult Register()
         {
+            if (User.Identity.IsAuthenticated)   return RedirectToAction("index", "home");
             return View();
         }
 
@@ -36,6 +37,8 @@ namespace FrontToBack.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
+            if (User.Identity.IsAuthenticated) return RedirectToAction("index", "home");
+
             if (!ModelState.IsValid) return View();
             AppUser appUser = new AppUser
             {
@@ -54,11 +57,14 @@ namespace FrontToBack.Controllers
                 return View(registerVM);
             }
             await _signInManager.SignInAsync(appUser, isPersistent: true);
+            
+            
             return RedirectToAction("Index", "home");
         }
 
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)    return RedirectToAction("index", "home");
             return View();
         }
 
@@ -67,6 +73,7 @@ namespace FrontToBack.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginVM loginvm)
         {
+            if (User.Identity.IsAuthenticated) return RedirectToAction("index", "home");
             if (!ModelState.IsValid) return View();
             AppUser appUser = await _usermanager.FindByEmailAsync(loginvm.Email);
             if (appUser == null) 
@@ -86,6 +93,7 @@ namespace FrontToBack.Controllers
                 ModelState.AddModelError("", "Email or password is wrong");
                 return View(loginvm);
             }
+            
             return RedirectToAction("index", "home");
         }
 
