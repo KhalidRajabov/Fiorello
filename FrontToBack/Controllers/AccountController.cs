@@ -99,8 +99,15 @@ namespace FrontToBack.Controllers
                 ModelState.AddModelError("", "Email or password is wrong");
                 return View(loginvm);
             }
-            
+
+            var roles = (await _usermanager.GetRolesAsync(appUser))[0];
+            if (roles.ToLower()=="admin")
+            {
+                return RedirectToAction("index", "dashboard", new { Area = "AdminPanel" });
+            }
             return RedirectToAction("index", "home");
+            
+            //return RedirectToAction("index", "home");
         }
 
         public async Task<IActionResult> Logout()
