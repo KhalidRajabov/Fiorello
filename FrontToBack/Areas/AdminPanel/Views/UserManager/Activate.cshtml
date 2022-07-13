@@ -1,0 +1,33 @@
+﻿@model AppUser
+@{
+    ViewData["Title"] = "Activate";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="row">
+
+    <div class="col-md-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">@Model.FullName</h4>
+                      <p>
+                          @Model.UserName
+                      </p>
+                      <p>
+                          @Model.Email
+                      </p>
+                    </div>
+                  </div>
+                </div>
+</div>
+
+<div class="row d-flex flex-row">
+          <form method="post">
+          <a style="align-self:center; margin-bottom: 40px; margin-top: 40px;" asp-controller="category" asp-action="index" class="btn btn-success">Cancel</a>
+              <button style="margin-left: 20px" class="btn btn-danger" type="submit">Delete</button>
+          </form>
+</div>
+  
+
+                          

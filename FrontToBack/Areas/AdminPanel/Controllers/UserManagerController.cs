@@ -38,5 +38,13 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             }
             return View(usersVM);
         }
+
+        public async Task<IActionResult> Activate(string? id)
+        {
+            if (id == null) return NotFound();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            return View(user);
+        }
     }
 }
