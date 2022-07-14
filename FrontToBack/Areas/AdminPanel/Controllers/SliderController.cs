@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace FrontToBack.Areas.AdminPanel.Controllers
 {
     [Area("AdminPanel")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     public class SliderController : Controller
     {
         private readonly AppDbContext _context;

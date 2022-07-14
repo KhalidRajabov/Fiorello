@@ -61,10 +61,8 @@ namespace FrontToBack.Controllers
                 return View(registerVM);
             }
             await _usermanager.AddToRoleAsync(appUser, "Member");
-            await _signInManager.SignInAsync(appUser, isPersistent: true);
             
-            
-            return RedirectToAction("Index", "home");
+            return RedirectToAction("login", "account");
         }
 
         public IActionResult Login()
@@ -76,7 +74,7 @@ namespace FrontToBack.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginVM loginvm)
+        public async Task<IActionResult> Login(LoginVM loginvm, string ReturnUrl)
         {
             if (User.Identity.IsAuthenticated) return RedirectToAction("index", "home");
             if (!ModelState.IsValid) return View();
@@ -99,10 +97,17 @@ namespace FrontToBack.Controllers
                 ModelState.AddModelError("", "Email or password is wrong");
                 return View(loginvm);
             }
-
-            var roles = (await _usermanager.GetRolesAsync(appUser))[0];
-            if (roles.ToLower()=="admin")
+            if (ReturnUrl!=null)
             {
+                return Redirect(ReturnUrl);
+            }
+
+            await _signInManager.SignInAsync(appUser, isPersistent: true);
+            var roles = (await _usermanager.GetRolesAsync(appUser))[0];
+            
+            if (roles.ToLower()=="admin"|| roles.ToLower() == "superadmin")
+            {
+
                 return RedirectToAction("index", "dashboard", new { Area = "AdminPanel" });
             }
             return RedirectToAction("index", "home");
@@ -119,8 +124,8 @@ namespace FrontToBack.Controllers
         /*public async Task CreateRole()
         {
 
-        ------- When needed a new role, uncomment this method and -------
-        ------- add a new role, then go to action in browser      -------
+            *//*-------When needed a new role, uncomment this method and -------
+            -------add a new role, then go to action in browser------ -*//*
 
 
 
@@ -132,6 +137,10 @@ namespace FrontToBack.Controllers
             if (!await _roleManager.RoleExistsAsync("Member"))
             {
                 await _roleManager.CreateAsync(new IdentityRole { Name = "Member" });
+            }
+            if (!await _roleManager.RoleExistsAsync("SuperAdmin"))
+            {
+                await _roleManager.CreateAsync(new IdentityRole { Name = "SuperAdmin" });
             }
         }*/
     }

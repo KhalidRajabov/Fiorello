@@ -32,9 +32,10 @@
                                         <li class=""><a class="px-1" href="">Page 2</a></li>
                                         <li class=""><a class="px-1" href="">Page 3</a></li>
                                     </ul>
-                                </li>
+                                
+                            </li>
                                 <li class="nav-item shop-li">
-                                    <a class="nav-link" href="#">Shop</a>
+                                    <a class="nav-link" asp-action="index" asp-controller="product">Product</a>
                                     <div class="container">
                                         <div class="row shop py-5">
                                             <div class="col-lg-3">
@@ -125,11 +126,11 @@
                                 }
                                 else
                                 {
-                                    <a class="nav-link" asp-controller="account" asp-action="login">Not logged</a>
+                                    <a class="nav-link" asp-controller="account" asp-action="login" asp-route-ReturnUrl="@Context.Request.Path">Not logged</a>
 
                                     <ul class="list-unstyled py-3" id="SearchList">
                                         <li class="d-flex px-3">
-                                            <a class="nav-link" asp-controller="account" asp-action="login">Login</a>
+                                            <a class="nav-link" asp-controller="account" asp-action="login" asp-route-ReturnUrl="@Context.Request.Path">Login</a>
                                         </li>
                                         <li class="d-flex px-3">
                                             <a class="nav-link" asp-controller="account" asp-action="register">Register</a>

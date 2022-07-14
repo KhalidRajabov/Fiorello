@@ -26,7 +26,9 @@ namespace FrontToBack.ViewComponents
             {
                 AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
                 ViewBag.User = user.UserName;
-                
+                var roles = (await _userManager.GetRolesAsync(user))[0];
+                ViewBag.UserRole=roles;
+
             }
             ViewBag.BasketCount = 0;
             ViewBag.TotalPrice = 0;

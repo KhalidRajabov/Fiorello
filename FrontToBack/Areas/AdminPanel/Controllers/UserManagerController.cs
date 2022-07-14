@@ -1,5 +1,6 @@
 ﻿using FrontToBack.Models;
 using FrontToBack.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace FrontToBack.Areas.AdminPanel.Controllers
 {
     [Area("AdminPanel")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     public class UserManagerController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
