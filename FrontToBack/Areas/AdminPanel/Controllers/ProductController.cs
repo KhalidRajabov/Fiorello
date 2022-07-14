@@ -1,11 +1,13 @@
 ﻿using FrontToBack.Extensions;
 using FrontToBack.Models;
+using FrontToBack.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,9 +28,19 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Index(int page=1, int take=5)
         {
-            return View(_context.Products.Include(p => p.Category).ToList());
+
+            List<Product> product = _context.Products.Include(p => p.Category)
+                .Skip((page-1)*take).Take(take).ToList();
+            PaginationVM<Product> paginationVM = new PaginationVM<Product>(product, PageCount(take), page);
+            return View(paginationVM);
+        }
+
+        private int PageCount(int take)
+        {
+            List<Product> products = _context.Products.ToList();
+            return (int)Math.Ceiling((decimal)products.Count() / take);
         }
 
         public async Task<IActionResult> Detail(int? id)
