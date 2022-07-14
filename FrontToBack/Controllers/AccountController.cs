@@ -111,8 +111,6 @@ namespace FrontToBack.Controllers
                 return RedirectToAction("index", "dashboard", new { Area = "AdminPanel" });
             }
             return RedirectToAction("index", "home");
-            
-            //return RedirectToAction("index", "home");
         }
 
         public async Task<IActionResult> Logout()
