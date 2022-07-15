@@ -29,13 +29,43 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             _signInManager = signInManager;
         }
 
-        public async Task<IActionResult> Index(string search)
+        public IActionResult Index(string search)
         {
             var users = search == null ? 
                 _userManager.Users.ToList() :
                 _userManager.Users.Where(users => users.FullName.ToLower().Contains(search.ToLower())).ToList();
             return View(users);
         }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null) return NotFound();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if(user==null) return NotFound();
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var dbRoles = _roleManager.Roles.ToList();
+            RoleVM rolevm = new RoleVM
+            {
+                FullName = user.FullName,
+                Roles = dbRoles,
+                UserRoles = userRoles,
+                UserId = user.Id
+            };
+            return View(rolevm);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(List<string> roles, string id)
+        {
+            if (id == null) return NotFound();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var dbRoles = _roleManager.Roles.ToList();
+            return View();
+        }
+
         /*public async Task<IActionResult> Index()
         {
             List<AppUser> users = _userManager.Users.ToList();
