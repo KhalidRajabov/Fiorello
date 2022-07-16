@@ -1,13 +1,15 @@
-﻿namespace FrontToBack.ViewModels
+﻿using System.Collections.Generic;
+
+namespace FrontToBack.ViewModels
 {
-    public class UserVM
+    public class UserInfoVM
     {
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string Fullname { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public bool IsActivated { get; set; }
-        public string Role { get; set; }
+        public List<string> Role { get; set; }
     }
 }

@@ -70,7 +70,77 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             await _userManager.RemoveFromRolesAsync(user, removedRoles);
             return RedirectToAction("index");
         }
+        public async Task<IActionResult> Detail(string id)
+        {
+            if (id == null) return NotFound();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if(user == null) return NotFound();
+            UserInfoVM userVM = new UserInfoVM();
+            var roles = await _userManager.GetRolesAsync(user);
+            userVM.Role = roles.ToList();
+            userVM.Fullname = user.FullName;
+            userVM.Email = user.Email;
+            userVM.Phone = user.PhoneNumber;
+            userVM.IsActivated = user.IsActivated;
+            userVM.Username = user.UserName;
+            return View(userVM);
+        }
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null) return NotFound();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            UserInfoVM userVM = new UserInfoVM();
+            var roles = await _userManager.GetRolesAsync(user);
+            userVM.Role = roles.ToList();
+            userVM.Fullname = user.FullName;
+            userVM.Email = user.Email;
+            userVM.Phone = user.PhoneNumber;
+            userVM.IsActivated = user.IsActivated;
+            userVM.Username = user.UserName;
+            userVM.Id = user.Id;
+            return View(userVM);
+        }
+        public async Task<IActionResult> DeleteUser(string? id)
+        {
+            if(id == null) return NotFound();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            await _userManager.DeleteAsync(user);
+            return RedirectToAction("index");
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(RegisterVM registerVM)
+        {
+            
+
+            if (!ModelState.IsValid) return View();
+            AppUser appUser = new AppUser
+            {
+                FullName = registerVM.Fullname,
+                UserName = registerVM.Username,
+                Email = registerVM.Email
+
+            };
+            IdentityResult result = await _userManager.CreateAsync(appUser, registerVM.Password);
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+                return View(registerVM);
+            }
+            await _userManager.AddToRoleAsync(appUser, "Member");
+            return RedirectToAction("index");
+        }
         /*public async Task<IActionResult> Index()
         {
             List<AppUser> users = _userManager.Users.ToList();

@@ -12,14 +12,14 @@
               <div class="card">
                 <div class="card-body">
 
+                            <a class="btn btn-warning fs-5"  asp-action="create">Register a User</a>
 
                              <form>
                               
                               <div class="form-group">
-                                <input name="search" id="search-user" type="text" class="form-control"  placeholder="Search">
+                                <input style="background-color:rgb(244,245,247); padding: 30px 15px; color:black" name="search" id="search-user" type="text" class="mt-4 text-dark form-control"  placeholder="Search">
                               </div>
                               <button type="submit" class="btn btn-primary">Search</button>
-
                             </form>
 
 
@@ -44,9 +44,18 @@
                           <td>@item.UserName</td>
                           <td>@item.Email</td>
                           <td>
-                                            <a class="btn btn-success"  asp-action="edit" asp-route-id="@item.Id">Edit</a>          
-                                        <a class="btn btn-success" asp-action="detail" asp-route-id="@item.Id"><i class="mdi mdi-information-outline"></i></a>
-                              <a class="btn btn-danger " asp-action="delete" asp-route-id="@item.Id"><i class="mdi mdi-delete-forever"></i></a>
+
+@{
+    #region
+    //adminin diger adminleri ve super adminleri
+    //edit etmek uchun funksiyalar bu sehifeye viewmodel
+    //ve ya viewbag istifadesi ile gonderilmelidi
+    #endregion
+}                              
+
+                            <a class="btn btn-info"  asp-action="edit" asp-route-id="@item.Id">Edit Role</a>          
+                            <a class="btn btn-success" asp-action="detail" asp-route-id="@item.Id"><i class="mdi mdi-information-outline"></i></a>
+                            <a class="btn btn-danger " asp-action="delete" asp-route-id="@item.Id"><i class="mdi mdi-delete-forever"></i></a>
 
                           </td>
                         </tr>

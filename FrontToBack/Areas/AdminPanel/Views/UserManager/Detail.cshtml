@@ -1,0 +1,51 @@
+﻿@model UserInfoVM
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<div class="row">
+
+    <div class="card " style="width: 18rem;">
+  @*<img src="..." class="card-img-top" alt="...">*@
+  <div class="card-body">
+    <h5 class="card-title ">@Model.Fullname</h5>
+    <p class="card-text ">@Model.Username</p>
+  </div>
+  
+  <ul class="list-group list-group-flush ">
+    <li class="list-group-item"> <h5>Roles:</h5></li>
+    @foreach (var item in Model.Role)
+            {
+                    <li class="list-group-item"> 
+                        @if (item.ToLower()=="ban"||item == "")
+                        {
+                            <span style="font-size:130%; font-weight: 500; color: red">
+                                A banned account
+                            </span>
+                    }
+                    else
+                    {
+                        <span style="font-size:130%; font-weight: 500; color: black">
+                                @item
+                        </span>
+                    }
+                    @*@((item.ToLower()=="ban"||item==null)?"Account is banned":$"{item}")*@
+                     </li>
+            }
+  </ul>
+  
+  <ul class="list-group list-group-flush ">
+    <li class="list-group-item"> <h5>Contact:</h5></li>
+    <li class="list-group-item">Email: @Model.Email</li>
+    <li class="list-group-item">Phone number: @(Model.Phone==null?"Not entered":$"{Model.Phone}")</li>
+    <li class="list-group-item">Activated: @(Model.IsActivated==false?"Not activated yet":"Activated")</li>
+  </ul>
+
+
+
+  <div class="card-body w-100 d-flex justify-content-center">
+    <a asp-action="index" class="card-link btn w-75 btn-dark text-light">Go back</a>
+  </div>
+</div>
+
+</div>
