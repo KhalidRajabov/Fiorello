@@ -33,7 +33,9 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
         {
             var users = search == null ? 
                 _userManager.Users.ToList() :
-                _userManager.Users.Where(users => users.FullName.ToLower().Contains(search.ToLower())).ToList();
+                _userManager.Users.Where(users => users.FullName.ToLower().Contains(search.ToLower())||
+                users.UserName.ToLower().Contains(search.ToLower())||
+                users.Email.ToLower().Contains(search.ToLower())).ToList();
             return View(users);
         }
 
@@ -62,8 +64,11 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             AppUser user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
             var userRoles = await _userManager.GetRolesAsync(user);
-            var dbRoles = _roleManager.Roles.ToList();
-            return View();
+            var addedRoles = roles.Except(userRoles);
+            var removedRoles = userRoles.Except(roles);
+            await _userManager.AddToRolesAsync(user, addedRoles);
+            await _userManager.RemoveFromRolesAsync(user, removedRoles);
+            return RedirectToAction("index");
         }
 
         /*public async Task<IActionResult> Index()

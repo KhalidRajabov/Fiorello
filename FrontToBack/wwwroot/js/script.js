@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
 
-    //search
+    //search product
 
     $(document).on("keyup", "#input-search", function () {
         let inputValue = $(this).val();
@@ -15,6 +15,12 @@ $(document).ready(function () {
             }
         })
     })
+
+
+
+
+
+
 
     // HEADER
 

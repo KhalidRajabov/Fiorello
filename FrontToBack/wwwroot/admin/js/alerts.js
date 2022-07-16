@@ -1,4 +1,9 @@
-(function($) {
+(function ($) {
+
+
+    
+
+
   showSwal = function(type) {
     'use strict';
     if (type === 'basic') {

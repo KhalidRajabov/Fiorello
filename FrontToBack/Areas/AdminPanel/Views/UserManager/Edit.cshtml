@@ -1,18 +1,18 @@
 ﻿@model RoleVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 <div class="row">
                             <form method="post">
-                              <h1>@Model.FullName</h1>
+                              <h1>@Model.FullName.ToString()</h1>
                               <input type="hidden" name="id" value="@Model.UserId"/>
                               @foreach (var item in Model.Roles)
                              {
-                                 <input type="checkbox" value="@item.ToString()" class="form-check-input"  @(Model.UserRoles.Contains(item.ToString())?"checked=\"checked\"":"")/> @item.ToString()<br />
+                                 <input name="roles" type="checkbox" value="@item.ToString()" class="form-check-input"  @(Model.UserRoles.Contains(item.ToString())?"checked=\"checked\"":"")/> @item.ToString()<br />
                              }
-                              <button type="submit" class="btn btn-primary">Create</button>
+                              <button type="submit"  class="btn btn-primary">Create</button>
                               <a class="btn btn-dark text-light" asp-action="index">Go Back</a>
                             </form>
 </div>
