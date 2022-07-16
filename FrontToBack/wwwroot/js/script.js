@@ -18,9 +18,9 @@ $(document).ready(function () {
 
 
 
-    //plus product
+    //add product to basket
 
-    let addBtn = document.querySelectorAll("#plus")
+    let addBtn = document.querySelectorAll("#add")
     let bTotal = document.getElementById("basketTotal")
     let tPrice = document.getElementById("basketPrice")
     addBtn.forEach(add =>
@@ -43,7 +43,68 @@ $(document).ready(function () {
         })
         )
 
+    //plus item in basket
 
+    let plusBtn = document.querySelectorAll("#plusitem")
+    plusBtn.forEach(add =>
+
+        add.addEventListener("click", function () {
+        
+            let dataId = this.getAttribute("data-id")
+            let span = this.previousElementSibling
+            console.log(dataId)
+            axios.post("/basket/plus?id=" + dataId)
+                .then(function (response) {
+                    
+                    // handle success
+                    bTotal.innerText = response.data.count
+                    tPrice.innerText = ` $${response.data.price}`
+                    span.innerText = response.data.main
+                    console.log(response)
+                    console.log(response.data.main)
+                    //console.log(response);
+                })
+                .catch(function (error) {
+                    // handle error
+                    
+                    console.log(error);
+                })
+        })
+    )
+
+    let minusBtn = document.querySelectorAll("#minusitem")
+    minusBtn.forEach(add =>
+
+        add.addEventListener("click", function () {
+
+            let dataId = this.getAttribute("data-id")
+            let span = this.nextElementSibling
+            let tr = span.parentElement.parentElement
+            console.log(dataId)
+            axios.post("/basket/minus?id=" + dataId)
+                .then(function (response) {
+
+                    // handle success
+                    bTotal.innerText = response.data.count
+                    tPrice.innerText = ` $${response.data.price}`
+                    span.innerText = response.data.main
+                    console.log(response)
+                    console.log(response.data.main)
+                    if (response.data.main<1) {
+                        tr.remove();
+                    }
+                    //console.log(response);
+                })
+                .catch(function (error) {
+                    // handle error
+
+                        //tr.remove();
+                    
+
+                    console.log(error);
+                })
+        })
+    )
 
 
 

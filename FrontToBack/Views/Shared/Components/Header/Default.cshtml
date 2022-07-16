@@ -25,6 +25,8 @@
                                         <li class=""><a class="px-1" href="">Home 3</a></li>
                                     </ul>
                                 </li>
+                                @if (ViewBag.UserRole=="admin")
+                            {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="adminpanel" asp-controller="dashboard" asp-action="index">admin</a>
                                     <ul class="list-unstyled py-3">
@@ -33,8 +35,21 @@
                                         <li class=""><a class="px-1" href="">Page 3</a></li>
                                     </ul>
                                 
-                            </li>
-                                <li class="nav-item shop-li">
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" >Blog</a>
+                                    <ul class="list-unstyled py-3">
+                                        <li class=""><a class="px-1" href="">Page 1</a></li>
+                                        <li class=""><a class="px-1" href="">Page 2</a></li>
+                                        <li class=""><a class="px-1" href="">Page 3</a></li>
+                                    </ul>
+                                
+                                </li>                                
+                            }
+                            <li class="nav-item shop-li">
                                     <a class="nav-link" asp-action="index" asp-controller="product">Product</a>
                                     <div class="container">
                                         <div class="row shop py-5">
@@ -152,7 +167,7 @@
                                 <li class="nav-item my-auto shop-cart">
                                     <a asp-controller="basket" asp-action="showitem"><i class="fas fa-shopping-bag"></i></a>
                                     <sup id="basketTotal" class="rounded-circle">@ViewBag.BasketCount</sup>
-                                    <span id="basketPrice">CART ($@ViewBag.TotalPrice)</span>
+                                    <span id="basketPrice"> ($@ViewBag.TotalPrice)</span>
                                     <ul class="list-unstyled py-3">
                                         <li class="">No products in the cart.</li>
                                     </ul>

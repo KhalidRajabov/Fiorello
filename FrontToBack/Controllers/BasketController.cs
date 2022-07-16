@@ -57,9 +57,23 @@ namespace FrontToBack.Controllers
             }
             
             Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
-            //HttpContext.Session.SetString("name","Khalid");
-            //Response.Cookies.Append("Nick", "Dante", new CookieOptions { MaxAge = TimeSpan.FromDays(365) });
-            return RedirectToAction("index", "home");
+            double price = 0;
+            double count = 0;
+
+            foreach (var product in products)
+            {
+                price += product.Price * product.ProductCount;
+                count += product.ProductCount;
+            }
+
+            var obj = new
+            {
+                Price = price,
+                Count = count,
+            };
+            //obj data-id ile baghlidir. response "obj" obyektidir,
+            //Ok'in icnde return edilmelidir ki API'de response gorsun
+            return Ok(obj);
         }
         public IActionResult ShowItem()
         {
@@ -116,8 +130,26 @@ namespace FrontToBack.Controllers
             {
                 products.Remove(dbproducts);
             }
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
-            return RedirectToAction("showitem","basket");
+            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions 
+            { 
+                MaxAge = TimeSpan.FromDays(100) 
+            });
+
+            double price = 0;
+            double count = 0;
+
+            foreach (var product in products)
+            {
+                price += product.Price * product.ProductCount;
+                count += product.ProductCount;
+            }
+            var obj = new
+            {
+                Price = price,
+                Count = count,
+                main = dbproducts.ProductCount
+            };
+            return Ok(obj);
         }
         public IActionResult Plus(int? id)
         {
@@ -128,8 +160,28 @@ namespace FrontToBack.Controllers
             BasketVM dbproducts = products.Find(p => p.Id == id);
             if (dbproducts == null) return NotFound();
             dbproducts.ProductCount++;
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
-            return RedirectToAction("showitem", "basket");
+            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions 
+            {
+                MaxAge = TimeSpan.FromDays(100) 
+            });
+
+            double price = 0;
+            double count = 0;
+          
+            foreach (var product in products)
+            {
+                price += product.Price * product.ProductCount;
+                count += product.ProductCount;
+            }
+            var obj = new
+            {
+                Price = price,
+                Count = count,
+                main = dbproducts.ProductCount
+            };
+
+
+            return Ok(obj);
         }
     }
 }

@@ -31,11 +31,14 @@
                        <td>@item.Price</td>
                        <td>$@(item.Price* item.ProductCount)</td>
                        <td>
-                           <a asp-controller="basket" asp-action="minus" asp-route-Id="@item.Id" class="btn btn-success">-</a>
+                           <a id="minusitem" data-id="@item.Id" class="btn btn-success">-</a>
 
-                           @item.ProductCount 
+                          <span>  
+                              @item.ProductCount
 
-                           <a asp-controller="basket" asp-action="plus" asp-route-Id="@item.Id" class="btn btn-warning">+</a>
+                          </span>  
+
+                           <a data-id="@item.Id" id="plusitem" class="btn btn-warning">+</a>
                        </td>
                        <td><a asp-controller="basket" asp-action="removeitem" asp-route-Id="@item.Id" class="btn btn-danger">X</a></td>
                     </tr>
