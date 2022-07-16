@@ -72,6 +72,10 @@ $(document).ready(function () {
         })
     )
 
+
+    //minus item in basket
+
+
     let minusBtn = document.querySelectorAll("#minusitem")
     minusBtn.forEach(add =>
 
@@ -90,7 +94,7 @@ $(document).ready(function () {
                     span.innerText = response.data.main
                     console.log(response)
                     console.log(response.data.main)
-                    if (response.data.main<1) {
+                    if (response.data.main == 0 || response.data.main == null) {
                         tr.remove();
                     }
                     //console.log(response);
@@ -106,6 +110,43 @@ $(document).ready(function () {
         })
     )
 
+
+    //delete item in basket
+
+
+    let delBtn = document.querySelectorAll("#deleteitem")
+    delBtn.forEach(add =>
+
+        add.addEventListener("click", function () {
+
+            let dataId = this.getAttribute("data-id")
+            let span = this.nextElementSibling
+            let tr = span.parentElement.parentElement
+            console.log(dataId)
+            axios.post("/basket/minus?id=" + dataId)
+                .then(function (response) {
+
+                    // handle success
+                    bTotal.innerText = response.data.count
+                    tPrice.innerText = ` $${response.data.price}`
+                    span.innerText = response.data.main
+                    console.log(response)
+                    console.log(response.data.main)
+                    //console.log(response);
+                })
+                .catch(function (error) {
+                    // handle error
+
+                    //tr.remove();
+
+
+                    console.log(error);
+                })
+        })
+        )
+
+
+    
 
 
 

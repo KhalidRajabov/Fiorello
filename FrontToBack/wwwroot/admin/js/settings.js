@@ -12,49 +12,7 @@
       $("#theme-settings").toggleClass("open");
     });
 
-      //search user
-
-      $(document).on("keyup", "#search-user", function () {
-
-          let inputValue = $(this).val();
-          /*$("#SearchList li").slice(1).remove();
-          $("#SearchList").html()*/
-          
-          $.ajax({
-              url: "usermanager/index?search=" + inputValue,
-              method: "get",
-              success: function (res) {
-                  
-                  $("#find-user-table").html(`<thead>
-                        <tr>
-                          <th>No</th>
-                          <th>Name</th>
-                          <th>Username</th>
-                          <th>Email</th>
-                          <th>Settings</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @foreach (var item in Model)
-                       {
-                            count++;
-                           <tr>
-                          <td>@count</td>
-                          <td>@item.FullName</td>
-                          <td>@item.UserName</td>
-                          <td>@item.Email</td>
-                          <td>
-                                            <a class="btn btn-success"  asp-action="edit" asp-route-id="@item.Id">Edit</a>          
-                                        <a class="btn btn-success" asp-action="detail" asp-route-id="@item.Id"><i class="mdi mdi-information-outline"></i></a>
-                              <a class="btn btn-danger " asp-action="delete" asp-route-id="@item.Id"><i class="mdi mdi-delete-forever"></i></a>
-
-                          </td>
-                        </tr>
-                       }
-                      </tbody>`)
-              }
-          })
-      })
+      
     //background constants
     var navbar_classes = "navbar-danger navbar-success navbar-warning navbar-dark navbar-light navbar-primary navbar-info navbar-pink";
     var sidebar_classes = "sidebar-light sidebar-dark";

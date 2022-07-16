@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace FrontToBack.Controllers
 {
+
     public class HomeController : Controller
     {
         private readonly AppDbContext _context;

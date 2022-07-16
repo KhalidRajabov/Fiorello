@@ -44,16 +44,18 @@
                   </div>
 
                     <div class="input-group d-flex flex-column mb-2 mr-sm-2">
-                    <label class="sr-only" asp-for="Password"></label>
-                      <input asp-for="Password" class="form-control  w-50" placeholder="Password:">
+                    <label class="sr-only"  asp-for="Password"></label>
+                      <input style="position: relative; border:2px solid red" asp-for="Password" class="form-control  w-50" placeholder="Password:">
+                        <i style="position: absolute; right: 52%; top: 26px; z-index:100000; font-size: 130%" class="mdi mdi-eye-off eye-icon"></i>
                       <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-check mx-sm-2">
-                      <label asp-for="RememberMe" class="form-check-label">
+                      <label  asp-for="RememberMe" class="form-check-label">
                         <input asp-for="RememberMe" class="form-check-input" >
                         Remember me
                       </label>
                     </div>
+
 
                     
                     <button type="submit" class="btn btn-primary ">Login</button>
@@ -87,6 +89,24 @@
   <script src="~/admin/js/file-upload.js"></script>
   <script src="~/admin/js/typeahead.js"></script>
   <script src="~/admin/js/select2.js"></script>
+
+  <script> 
+
+      let eyeicon = document.querySelector(".eye-icon")
+      let value = eyeicon.previousElementSibling.innerText;
+      
+    eyeicon.onmouseover = function () {
+        this.previousElementSibling.type="text"
+        this.classList.remove("mdi-eye-off");
+        this.classList.add("mdi-eye");
+    }
+    eyeicon.onmouseleave = function () {
+        this.previousElementSibling.type = "password";
+        this.classList.remove("mdi-eye");
+        this.classList.add("mdi-eye-off");
+    }
+
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 </html>

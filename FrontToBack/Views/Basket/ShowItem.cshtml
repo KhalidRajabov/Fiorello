@@ -40,7 +40,7 @@
 
                            <a data-id="@item.Id" id="plusitem" class="btn btn-warning">+</a>
                        </td>
-                       <td><a asp-controller="basket" asp-action="removeitem" asp-route-Id="@item.Id" class="btn btn-danger">X</a></td>
+                       <td><a data-id="@item.Id" id="deleteitem" class="btn btn-danger">X</a></td>
                     </tr>
                 }
 

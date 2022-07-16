@@ -85,8 +85,24 @@ namespace FrontToBack.Controllers
                 return View(loginvm); 
             }
 
-            SignInResult result = await _signInManager
-                .PasswordSignInAsync(appUser, loginvm.Password, loginvm.RememberMe, true);
+
+            var roles = await _usermanager.GetRolesAsync(appUser);
+            foreach (var item in roles)
+            {
+                if (item.ToLower() == "ban" || roles == null) {
+                    ModelState.AddModelError("", "You are banned");
+                    await _signInManager.SignOutAsync();
+                    return View(loginvm);
+                }
+
+            else if (item.ToLower()=="admin"|| item.ToLower() == "superadmin")
+            {
+            await _signInManager.SignInAsync(appUser, isPersistent: true);
+
+                return RedirectToAction("index", "dashboard", new { Area = "AdminPanel" });
+            }
+            }
+            SignInResult result = await _signInManager.PasswordSignInAsync(appUser, loginvm.Password, loginvm.RememberMe, true);
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError("", "Your account is blocked");
@@ -97,20 +113,16 @@ namespace FrontToBack.Controllers
                 ModelState.AddModelError("", "Email or password is wrong");
                 return View(loginvm);
             }
-            if (ReturnUrl!=null)
+            /*if (ReturnUrl!=null)
             {
                 return Redirect(ReturnUrl);
-            }
+            }*/
 
-            await _signInManager.SignInAsync(appUser, isPersistent: true);
-            var roles = (await _usermanager.GetRolesAsync(appUser))[0];
             
-            if (roles.ToLower()=="admin"|| roles.ToLower() == "superadmin")
-            {
-
-                return RedirectToAction("index", "dashboard", new { Area = "AdminPanel" });
-            }
+            
+            await _signInManager.SignInAsync(appUser, isPersistent: true);
             return RedirectToAction("index", "home");
+
         }
 
         public async Task<IActionResult> Logout()
