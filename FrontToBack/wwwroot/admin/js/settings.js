@@ -19,6 +19,7 @@
           let inputValue = $(this).val();
           /*$("#SearchList li").slice(1).remove();
           $("#SearchList").html()*/
+          
           $.ajax({
               url: "usermanager/index?search=" + inputValue,
               method: "get",

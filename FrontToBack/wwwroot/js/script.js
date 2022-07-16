@@ -18,6 +18,33 @@ $(document).ready(function () {
 
 
 
+    //plus product
+
+    let addBtn = document.querySelectorAll("#plus")
+    let bTotal = document.getElementById("basketTotal")
+    let tPrice = document.getElementById("basketPrice")
+    addBtn.forEach(add =>
+        
+        add.addEventListener("click", function () {
+            let dataId = this.getAttribute("data-id")
+            console.log(dataId)
+            axios.post("/basket/additem?id=" + dataId)
+                .then(function (response) {
+                    // handle success
+                    bTotal.innerHTML = response.data.count
+                    tPrice.innerHTML = ` $${response.data.price}`
+                    //console.log(response);
+                })
+                .catch(function (error) {
+                    // handle error
+                    alert("error"+ dataId)
+                    console.log(error);
+                })
+        })
+        )
+
+
+
 
 
 
