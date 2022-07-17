@@ -101,7 +101,7 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             userVM.Id = user.Id;
             return View(userVM);
         }
-        public async Task<IActionResult> DeleteUser(string? id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
             if(id == null) return NotFound();
             AppUser user = await _userManager.FindByIdAsync(id);

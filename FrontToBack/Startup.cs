@@ -24,12 +24,13 @@ namespace FrontToBack
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   
             services.AddControllersWithViews();
             services.AddDbContext<AppDbContext>(option =>
             {
                 option.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
+
             services.AddSession(opt =>
             {
                 opt.IdleTimeout = TimeSpan.FromMinutes(20);
@@ -43,9 +44,12 @@ namespace FrontToBack
                 opt.Password.RequireDigit = true;
 
                 opt.User.RequireUniqueEmail = true;
+                opt.SignIn.RequireConfirmedEmail = true;
                 opt.Lockout.MaxFailedAccessAttempts = 3;
                 opt.Lockout.AllowedForNewUsers = true;
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+
+               
 
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders().AddErrorDescriber<RegisterErrorMessages>();
         }

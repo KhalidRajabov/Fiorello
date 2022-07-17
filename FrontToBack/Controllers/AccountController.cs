@@ -3,7 +3,9 @@ using FrontToBack.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using FrontToBack.Helper;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using Microsoft.Extensions.Configuration;
 
 namespace FrontToBack.Controllers
 {
@@ -13,16 +15,19 @@ namespace FrontToBack.Controllers
         private readonly UserManager<AppUser> _usermanager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private IConfiguration _config { get; }
 
         public AccountController
             (UserManager<AppUser> usermanager, 
             RoleManager<IdentityRole>roleManager, 
-            SignInManager<AppUser> signInManager
+            SignInManager<AppUser> signInManager,
+            IConfiguration config
             )
         {
             _usermanager = usermanager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _config = config;
         }
 
         public IActionResult Index()
@@ -61,7 +66,18 @@ namespace FrontToBack.Controllers
                 return View(registerVM);
             }
             await _usermanager.AddToRoleAsync(appUser, "Member");
+            string token = await _usermanager.GenerateEmailConfirmationTokenAsync(appUser);
+            string ConfirmationLink = Url.Action("ConfirmEmail", "EmailConfirmation", new { token, Email = registerVM.Email}, Request.Scheme);
+
+            EmailHelper emailHelper = new EmailHelper(_config.GetSection("ConfirmationParam:Email").Value, _config.GetSection("ConfirmationParam:Password").Value);
+            var emailResult = emailHelper.SendEmail(registerVM.Email, ConfirmationLink);
+
+            if (!emailResult)
+            {
+                return View(registerVM);
+            }
             
+
             return RedirectToAction("login", "account");
         }
 
@@ -97,9 +113,14 @@ namespace FrontToBack.Controllers
 
             else if (item.ToLower()=="admin"|| item.ToLower() == "superadmin")
             {
-            await _signInManager.SignInAsync(appUser, isPersistent: true);
+                    if (!appUser.EmailConfirmed)
+                    {
+                        ModelState.AddModelError("", "Please confirm your email");
+                        return View();
+                    }
+                    await _signInManager.SignInAsync(appUser, isPersistent: true);
 
-                return RedirectToAction("index", "dashboard", new { Area = "AdminPanel" });
+                    return RedirectToAction("index", "dashboard", new { Area = "AdminPanel" });
             }
             }
             SignInResult result = await _signInManager.PasswordSignInAsync(appUser, loginvm.Password, loginvm.RememberMe, true);
@@ -118,8 +139,12 @@ namespace FrontToBack.Controllers
                 return Redirect(ReturnUrl);
             }*/
 
-            
-            
+
+            if (!appUser.EmailConfirmed)
+            {
+                ModelState.AddModelError("", "Please confirm your email");
+                return View();
+            }
             await _signInManager.SignInAsync(appUser, isPersistent: true);
             return RedirectToAction("index", "home");
 
