@@ -132,7 +132,7 @@
 
                                     @if (User.Identity.IsAuthenticated)
                                 {
-                                    <a class="nav-link">@ViewBag.User</a>
+                                    <a class="nav-link" asp-action="index" asp-controller="profilemanager" asp-route-id="@ViewBag.UserId">@ViewBag.User</a>
                                     <ul class="list-unstyled py-3" id="SearchList">
                                         <li class="d-flex px-3">
                                             <a class="nav-link" asp-controller="account" asp-action="logout">Logout</a>

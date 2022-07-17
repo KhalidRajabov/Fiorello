@@ -21,12 +21,14 @@ namespace FrontToBack.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            ViewBag.UserId = "";
             ViewBag.UserRole = "";
             ViewBag.User = "Login";
             if (User.Identity.IsAuthenticated)
             {
                 AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
                 ViewBag.User = user.UserName;
+                ViewBag.UserId = user.Id;
                 var roles = (await _userManager.GetRolesAsync(user));
                 foreach (var item in roles)
                 {
