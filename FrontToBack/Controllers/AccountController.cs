@@ -111,7 +111,7 @@ namespace FrontToBack.Controllers
                     return View(loginvm);
                 }
 
-            else if (item.ToLower()=="admin"|| item.ToLower() == "superadmin")
+            else if (item.ToLower().Contains("admin"))
             {
                     if (!appUser.EmailConfirmed)
                     {
@@ -129,6 +129,15 @@ namespace FrontToBack.Controllers
                 ModelState.AddModelError("", "Your account is blocked");
                 return View(loginvm);
             }
+
+
+            if (!appUser.EmailConfirmed)
+            {
+                ModelState.AddModelError("", "Please confirm your email");
+                return View(loginvm);
+            }
+
+
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "Email or password is wrong");
@@ -140,11 +149,6 @@ namespace FrontToBack.Controllers
             }*/
 
 
-            if (!appUser.EmailConfirmed)
-            {
-                ModelState.AddModelError("", "Please confirm your email");
-                return View();
-            }
             await _signInManager.SignInAsync(appUser, isPersistent: true);
             return RedirectToAction("index", "home");
 

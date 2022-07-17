@@ -18,6 +18,7 @@ namespace FrontToBack.Controllers
         {
             AppUser user= await _userManager.FindByEmailAsync(email);
             var result = await _userManager.ConfirmEmailAsync(user, token);
+           
             return View(result.Succeeded?"ConfirmEmail":"Error");
         }
     }

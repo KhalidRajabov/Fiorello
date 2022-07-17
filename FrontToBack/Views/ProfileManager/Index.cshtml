@@ -18,8 +18,15 @@
     <li class="list-group-item"> <h5>Contact:</h5></li>
     <li class="list-group-item">Email: @Model.Email</li>
     <li class="list-group-item">Phone number: @(Model.Phone==null?"Not entered":$"{Model.Phone}")</li>
-    <li class="list-group-item">Activated: @(Model.IsActivated==false?"Not activated yet":"Activated")</li>
-  </ul>
+    @if (Model.IsActivated)
+                {
+                <li class="list-group-item">Activated: <span style="color: lawngreen">The account is activated</span></li>
+            }
+            else
+            {
+                <li class="list-group-item">Activated: <span style="color: darkred">The account is not activated</span></li>
+            }
+        </ul>
 
   
     <ul class="list-group list-group-flush">

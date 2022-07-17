@@ -17,11 +17,12 @@
     @foreach (var item in Model.Role)
             {
                     <li class="list-group-item"> 
-                        @if (item.ToLower()=="ban"||item == "")
+                        @if (item.ToLower()=="ban"||item==null)
                         {
                             <span style="font-size:130%; font-weight: 500; color: red">
                                 A banned account
                             </span>
+                            return;
                     }
                     else
                     {

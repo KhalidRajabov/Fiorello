@@ -10,7 +10,7 @@ namespace FrontToBack.Helper
         public EmailHelper(string email,string password)
         {
             _password = password;
-
+            _email = email;
         }
 
         public bool SendEmail(string UserEmail, string ConfirmationLink)
