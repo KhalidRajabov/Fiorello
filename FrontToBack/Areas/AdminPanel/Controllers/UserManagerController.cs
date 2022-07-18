@@ -83,6 +83,7 @@ namespace FrontToBack.Areas.AdminPanel.Controllers
             userVM.Phone = user.PhoneNumber;
             userVM.IsActivated = user.IsActivated;
             userVM.Username = user.UserName;
+            userVM.EmailConfirmed = user.EmailConfirmed;
             return View(userVM);
         }
         public async Task<IActionResult> Delete(string id)

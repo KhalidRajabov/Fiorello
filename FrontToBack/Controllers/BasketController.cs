@@ -183,5 +183,12 @@ namespace FrontToBack.Controllers
 
             return Ok(obj);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Sale()
+        {
+            return View();
+        }
     }
 }

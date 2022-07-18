@@ -18,13 +18,13 @@
     <li class="list-group-item"> <h5>Contact:</h5></li>
     <li class="list-group-item">Email: @Model.Email</li>
     <li class="list-group-item">Phone number: @(Model.Phone==null?"Not entered":$"{Model.Phone}")</li>
-    @if (Model.IsActivated)
+    @if (!Model.EmailConfirmed)
                 {
-                <li class="list-group-item">Activated: <span style="color: lawngreen">The account is activated</span></li>
+                <li class="list-group-item">Activated: <span style="color: limegreen">The account is activated</span></li>
             }
             else
             {
-                <li class="list-group-item">Activated: <span style="color: darkred">The account is not activated</span></li>
+                <li class="list-group-item">Activated: <span style="color: red">The account is not activated, please confirm your email</span></li>
             }
         </ul>
 
@@ -37,7 +37,7 @@
   
 
   <div class="card-body w-100">
-    <a asp-action="edit" class="btn btn-warning card-link text-light">Edit Account</a>
+    <a asp-action="changepassword" asp-controller="profilemanager" asp-route-id="@Model.Id" class="btn btn-warning card-link text-light">Edit Account</a>
     <a asp-action="index" asp-controller="home" class="card-link btn btn-dark text-light">Go back</a>
   </div>
   

@@ -10,6 +10,7 @@ namespace FrontToBack.ViewModels
         public string ImageURL { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public bool EmailConfirmed { get; set; }
         public bool IsActivated { get; set; }
         public List<string> Role { get; set; }
         public string About { get; set; }

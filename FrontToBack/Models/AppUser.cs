@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FrontToBack.Models
@@ -12,5 +14,12 @@ namespace FrontToBack.Models
         public string ImageURL { get; set; }
         [NotMapped]
         public IFormFile Photo { get; set; }
+
+
+        public DateTime UserCreatedTime { get; set; }
+        public DateTime ConfirmedTime { get; set; }
+
+        public List<Sale> Sales { get; set; }
+
     }
 }

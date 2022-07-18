@@ -3,6 +3,7 @@
     ViewData["Title"] = "ShowItem";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int count = 0;
+    
 }
 
 <div class="container">
@@ -52,5 +53,12 @@
         {
             <a asp-controller="home" asp-action="index">Home</a>
         }
+    </div>
+
+    <div class="row w-100">
+        <span> @Model.Sum(p=>p.Price*p.ProductCount) </span>
+        <form method="post" class="ml-5">
+                <button type="submit" class="btn btn-success">Purchase</button>
+        </form>
     </div>
 </div>
