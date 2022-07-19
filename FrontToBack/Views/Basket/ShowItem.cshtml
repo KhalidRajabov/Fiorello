@@ -7,7 +7,7 @@
 }
 
 
-<div class="container">
+<div class="container" id="cunt">
         @if (TempData["Success"]!=null)
         {
             <div class="alert alert-success sale" >
@@ -21,10 +21,10 @@
                     @TempData["fail"]
             </div>
         }
-    <div class="row">
+    <div class="row" id="page-basket">
       @if (Model.Count()>0)
         {
-              <table class="table">
+              <table id="main-table" class="table">
   <thead>
     <tr>
       <th scope="col">Count</th>
@@ -35,7 +35,7 @@
       <th scope="col">Quantity</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="table-body">
     @foreach (var item in Model)
                 {
                     count++;
@@ -68,7 +68,6 @@
         </form>
     </div>
         }
-
         else
         {
             <a asp-controller="home" asp-action="index">Home</a>

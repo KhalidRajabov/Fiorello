@@ -86,16 +86,19 @@ $(document).ready(function () {
             let span = this.nextElementSibling
             let tr = span.parentElement.parentElement;
             let tabletotalprice = this.parentElement.previousElementSibling;
-            console.log(tr)
+            console.log(container)
             axios.post("/basket/minus?id=" + dataId)
                 .then(function (response) {
 
-                    
                     
                     if (response.data.count == 0) {
                         bTotal.innerText = response.data.main
                         tPrice.innerText = response.data.price
                         tr.remove();
+                        if (response.data.main == 0) {
+                            location.reload();
+                            
+                        }
                     }
                     else {
                         bTotal.innerText = response.data.main
@@ -135,6 +138,9 @@ $(document).ready(function () {
                     bTotal.innerText = response.data.count;
                     tPrice.innerText = response.data.price;
                     tr.remove();
+                    if (response.data.count == 0) {
+                        location.reload();
+                    }
                 })
                 .catch(function (error) {
 

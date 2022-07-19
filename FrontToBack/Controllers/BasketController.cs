@@ -228,7 +228,6 @@ namespace FrontToBack.Controllers
                 itemTotal = dbproducts.Price * dbproducts.ProductCount
             };
 
-
             return Ok(obj);
         }
 
