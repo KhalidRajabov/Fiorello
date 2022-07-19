@@ -20,7 +20,7 @@ $(document).ready(function () {
 
     //add product to basket
 
-    let addBtn = document.querySelectorAll("#add")
+    let addBtn = document.querySelectorAll(".add")
     let bTotal = document.getElementById("basketTotal")
     let tPrice = document.getElementById("basketPrice")
     addBtn.forEach(add =>
@@ -45,21 +45,23 @@ $(document).ready(function () {
 
     //plus item in basket
 
-    let plusBtn = document.querySelectorAll("#plusitem")
+    let plusBtn = document.querySelectorAll(".plusitem")
     plusBtn.forEach(add =>
 
         add.addEventListener("click", function () {
         
             let dataId = this.getAttribute("data-id")
-            let span = this.previousElementSibling
+            let span = this.previousElementSibling;
+            let tabletotalprice = this.parentElement.previousElementSibling;
             console.log(dataId)
             axios.post("/basket/plus?id=" + dataId)
                 .then(function (response) {
                     
                     // handle success
                     bTotal.innerText = response.data.count
-                    tPrice.innerText = ` $${response.data.price}`
+                    tPrice.innerText = response.data.price
                     span.innerText = response.data.main
+                    tabletotalprice.innerText=response.data.itemTotal
                     console.log(response)
                     console.log(response.data.main)
                     //console.log(response);
@@ -76,26 +78,30 @@ $(document).ready(function () {
     //minus item in basket
 
 
-    let minusBtn = document.querySelectorAll("#minusitem")
+    let minusBtn = document.querySelectorAll(".minusitem")
     minusBtn.forEach(add =>
-
         add.addEventListener("click", function () {
-
+        
             let dataId = this.getAttribute("data-id")
             let span = this.nextElementSibling
-            let tr = span.parentElement.parentElement
-            console.log(dataId)
+            let tr = span.parentElement.parentElement;
+            let tabletotalprice = this.parentElement.previousElementSibling;
+            console.log(tr)
             axios.post("/basket/minus?id=" + dataId)
                 .then(function (response) {
 
-                    // handle success
-                    bTotal.innerText = response.data.count
-                    tPrice.innerText = ` $${response.data.price}`
-                    span.innerText = response.data.main
-                    console.log(response)
-                    console.log(response.data.main)
-                    if (response.data.main == 0 || response.data.main == null) {
+                    
+                    
+                    if (response.data.count == 0) {
+                        bTotal.innerText = response.data.main
+                        tPrice.innerText = response.data.price
                         tr.remove();
+                    }
+                    else {
+                        bTotal.innerText = response.data.main
+                        tPrice.innerText = response.data.price
+                        span.innerText = response.data.count
+                        tabletotalprice.innerText = response.data.itemTotal;
                     }
                     //console.log(response);
                 })
@@ -114,31 +120,23 @@ $(document).ready(function () {
     //delete item in basket
 
 
-    let delBtn = document.querySelectorAll("#deleteitem")
-    delBtn.forEach(add =>
-
+    let delBtn = document.querySelectorAll(".deleteitem")
+        delBtn.forEach(add =>
+        
         add.addEventListener("click", function () {
 
-            let dataId = this.getAttribute("data-id")
-            let span = this.nextElementSibling
-            let tr = span.parentElement.parentElement
+            let dataId = this.getAttribute(`data-id`)
+            let tr = this.parentElement.parentElement;
             console.log(dataId)
-            axios.post("/basket/minus?id=" + dataId)
+            axios.post("/basket/RemoveItem?id=" + dataId)
                 .then(function (response) {
 
-                    // handle success
-                    bTotal.innerText = response.data.count
-                    tPrice.innerText = ` $${response.data.price}`
-                    span.innerText = response.data.main
-                    console.log(response)
-                    console.log(response.data.main)
-                    //console.log(response);
+                    
+                    bTotal.innerText = response.data.count;
+                    tPrice.innerText = response.data.price;
+                    tr.remove();
                 })
                 .catch(function (error) {
-                    // handle error
-
-                    //tr.remove();
-
 
                     console.log(error);
                 })

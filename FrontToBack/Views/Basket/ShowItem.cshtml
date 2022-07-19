@@ -46,19 +46,19 @@
                        <td>@item.Price</td>
                        <td>$@(item.Price* item.ProductCount)</td>
                        <td>
-                           <a id="minusitem" data-id="@item.Id" class="btn btn-success">-</a>
+                           <a data-id="@item.Id" class="minusitem btn btn-success">-</a>
 
                           <span>  
                               @item.ProductCount
 
                           </span>  
 
-                           <a data-id="@item.Id" id="plusitem" class="btn btn-warning">+</a>
+                           <a data-id="@item.Id" class="plusitem btn btn-warning">+</a>
+
                        </td>
-                       <td><a data-id="@item.Id" id="deleteitem" class="btn btn-danger">X</a></td>
+                       <td><a data-id="@item.Id"  class="deleteitem btn btn-danger">X</a></td>
                     </tr>
                 }
-
   </tbody>
             </table>
     <div class="row w-100 mt-5">

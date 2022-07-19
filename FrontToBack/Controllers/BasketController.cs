@@ -108,51 +108,93 @@ namespace FrontToBack.Controllers
         {
             if (id == null) return NotFound();
             string basket = Request.Cookies["basket"];
-            List<BasketVM> products;
-            products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
+            List<BasketVM> products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
             BasketVM dbProduct = products.Find(p=>p.Id==id);
             if (dbProduct == null) return NotFound();
 
 
             products.Remove(dbProduct);
             Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
-            return RedirectToAction("showitem","basket");
+
+            double subtotal = 0;
+            int basketCount = 0;
+
+            if (products.Count > 0)
+            {
+                foreach (BasketVM item in products)
+                {
+                    subtotal += item.Price * dbProduct.ProductCount;
+                    basketCount += item.ProductCount;
+                }
+            }
+
+            var obj = new
+            {
+                Price = $"(${subtotal})",
+                Count = basketCount
+            };
+            return Ok(obj);
         }
 
         public IActionResult Minus(int? id)
         {
             if (id == null) return NotFound();
             string basket = Request.Cookies["basket"];
-            List<BasketVM> products;
-            products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
+            List<BasketVM> products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
             BasketVM dbproducts = products.Find(p => p.Id == id);
             if (dbproducts == null) return NotFound();
+
+
+            double subtotal = 0;
+            int basketCount = 0;
+
             if (dbproducts.ProductCount>1)
             {
                 dbproducts.ProductCount--;
+                Response.Cookies.Append("basket", JsonConvert.SerializeObject(dbproducts));
             }
             else
             {
                 products.Remove(dbproducts);
+
+
+                List<BasketVM> productsNew = products.FindAll(p => p.Id != id);
+
+                Response.Cookies.Append("basket", JsonConvert.SerializeObject(productsNew));
+
+                foreach (BasketVM pr in productsNew)
+                {
+                    subtotal += pr.Price * pr.ProductCount;
+                    basketCount += pr.ProductCount;
+                }
+
+                var obje= new
+                {
+                    count = 0,
+                    price = subtotal,
+                    main = basketCount
+                };
+
+                return Ok(obje);
             }
             Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions 
             { 
                 MaxAge = TimeSpan.FromDays(100) 
             });
 
-            double price = 0;
-            double count = 0;
 
             foreach (var product in products)
             {
-                price += product.Price * product.ProductCount;
-                count += product.ProductCount;
+                subtotal += product.Price * product.ProductCount;
+                basketCount += product.ProductCount;
             }
+
             var obj = new
             {
-                Price = price,
-                Count = count,
-                main = dbproducts.ProductCount
+                Price = subtotal,
+                Count = dbproducts.ProductCount,
+                main = basketCount,
+                itemTotal =dbproducts.Price*dbproducts.ProductCount
             };
             return Ok(obj);
         }
@@ -182,7 +224,8 @@ namespace FrontToBack.Controllers
             {
                 Price = price,
                 Count = count,
-                main = dbproducts.ProductCount
+                main = dbproducts.ProductCount,
+                itemTotal = dbproducts.Price * dbproducts.ProductCount
             };
 
 
