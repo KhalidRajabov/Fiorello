@@ -179,7 +179,7 @@ namespace FrontToBack.Controllers
             }
             Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions 
             { 
-                MaxAge = TimeSpan.FromDays(100) 
+                MaxAge = TimeSpan.FromDays(100)
             });
 
 
@@ -259,8 +259,8 @@ namespace FrontToBack.Controllers
                     salesProduct.Id = sale.Id;
                     salesProduct.Price = dbProduct.Price;
                     salesProducts.Add(salesProduct);
-
                     Total += baskepProducts.ProductCount * dbProduct.Price;
+                    dbProduct.Count -= baskepProducts.ProductCount;
                 }
                 sale.SalesProducts = salesProducts;
                 await _context.AddAsync(sale);
