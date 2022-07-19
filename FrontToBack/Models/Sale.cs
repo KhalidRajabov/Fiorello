@@ -7,7 +7,7 @@ namespace FrontToBack.Models
     {
         public int Id { get; set; }
         public DateTime SaleDate { get; set; }
-        public double TOtal { get; set; }
+        public double Total { get; set; }
 
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }

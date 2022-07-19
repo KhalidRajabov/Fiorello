@@ -1,6 +1,7 @@
 ﻿using FrontToBack.Models;
 using FrontToBack.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -14,10 +15,14 @@ namespace FrontToBack.Controllers
     {
 
         private readonly AppDbContext _context;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _usermanager;
 
-        public BasketController(AppDbContext context)
+        public BasketController(AppDbContext context, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
             _context = context;
+            _signInManager = signInManager;
+            _usermanager = userManager;
         }
 
         public IActionResult Index() 
@@ -188,7 +193,42 @@ namespace FrontToBack.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Sale()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                AppUser user = await _usermanager.FindByNameAsync(User.Identity.Name);
+                Sale sale = new Sale();
+                sale.SaleDate = DateTime.Now;
+                sale.AppUserId = user.Id;
+                List<BasketVM> basket = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
+                List<SalesProduct> salesProducts = new List<SalesProduct>();
+                double Total = 0;
+                foreach (var baskepProducts in basket)
+                {
+                    Product dbProduct = await _context.Products.FindAsync(baskepProducts.Id);
+                    if (baskepProducts.ProductCount>dbProduct.Count)
+                    {
+                        TempData["Fail"] = "Purchase failed. Not enough product in storehouse left...";
+                        return RedirectToAction("showitem");
+                    }
+                    SalesProduct salesProduct = new SalesProduct();
+                    salesProduct.ProductId = dbProduct.Id;
+                    salesProduct.Count = baskepProducts.ProductCount;
+                    salesProduct.Id = sale.Id;
+                    salesProduct.Price = dbProduct.Price;
+                    salesProducts.Add(salesProduct);
+
+                    Total += baskepProducts.ProductCount * dbProduct.Price;
+                }
+                sale.SalesProducts = salesProducts;
+                await _context.AddAsync(sale);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Purchase succesfull";
+                return RedirectToAction("showitem");
+            }
+            else
+            {
+            return RedirectToAction("login", "account");
+            }
         }
     }
 }
