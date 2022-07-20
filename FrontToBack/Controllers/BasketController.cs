@@ -32,18 +32,28 @@ namespace FrontToBack.Controllers
 
         public async Task<IActionResult> AddItem(int? id)
         {
+            string username="";
+            if (!User.Identity.IsAuthenticated)
+            {
+               return RedirectToAction("login", "account");
+            }
+            else
+            {
+                username = User.Identity.Name;   
+            }
+            if (id == null)
             if (id==null)return NotFound();
             Product dbProduct = await _context.Products.FindAsync(id);
             if (dbProduct == null) return NotFound();
 
             List<BasketVM> products;
-            if (Request.Cookies["basket"]==null)
+            if (Request.Cookies[$"basket{username}"]==null)
             {
                products = new List<BasketVM>();
             }
             else
             {
-                products= JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
+                products= JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies[$"basket{username}"]);
             }
             BasketVM IsExist = products.Find(x => x.Id == id);
             if (IsExist==null)
@@ -61,7 +71,7 @@ namespace FrontToBack.Controllers
                 IsExist.ProductCount++;
             }
             
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
+            Response.Cookies.Append($"basket{username}", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
             double price = 0;
             double count = 0;
 
@@ -82,9 +92,17 @@ namespace FrontToBack.Controllers
         }
         public IActionResult ShowItem()
         {
-
+            string username = "";
+            if (!User.Identity.IsAuthenticated)
+            {
+               return RedirectToAction("login", "account");
+            }
+            else
+            {
+                username = User.Identity.Name;
+            }
             //string name = HttpContext.Session.GetString("name");
-            string basket = Request.Cookies["basket"];
+            string basket = Request.Cookies[$"basket{username}"];
             List<BasketVM> products;
 
             if (basket != null)
@@ -106,15 +124,24 @@ namespace FrontToBack.Controllers
         }
         public  IActionResult RemoveItem(int? id)
         {
+            string username = "";
+            if (!User.Identity.IsAuthenticated)
+            {
+               return RedirectToAction("login", "account");
+            }
+            else
+            {
+                username = User.Identity.Name;
+            }
             if (id == null) return NotFound();
-            string basket = Request.Cookies["basket"];
+            string basket = Request.Cookies[$"basket{username}"];
             List<BasketVM> products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
             BasketVM dbProduct = products.Find(p=>p.Id==id);
             if (dbProduct == null) return NotFound();
 
 
             products.Remove(dbProduct);
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
+            Response.Cookies.Append($"basket{username}", JsonConvert.SerializeObject(products), new CookieOptions { MaxAge = TimeSpan.FromDays(100) });
 
             double subtotal = 0;
             int basketCount = 0;
@@ -138,8 +165,17 @@ namespace FrontToBack.Controllers
 
         public IActionResult Minus(int? id)
         {
+            string username = "";
+            if (!User.Identity.IsAuthenticated)
+            {
+               return RedirectToAction("login", "account");
+            }
+            else
+            {
+                username = User.Identity.Name;
+            }
             if (id == null) return NotFound();
-            string basket = Request.Cookies["basket"];
+            string basket = Request.Cookies[$"basket{username}"];
             List<BasketVM> products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
             BasketVM dbproducts = products.Find(p => p.Id == id);
             if (dbproducts == null) return NotFound();
@@ -151,7 +187,7 @@ namespace FrontToBack.Controllers
             if (dbproducts.ProductCount>1)
             {
                 dbproducts.ProductCount--;
-                Response.Cookies.Append("basket", JsonConvert.SerializeObject(dbproducts));
+                Response.Cookies.Append($"basket{username}", JsonConvert.SerializeObject(dbproducts));
             }
             else
             {
@@ -160,7 +196,7 @@ namespace FrontToBack.Controllers
 
                 List<BasketVM> productsNew = products.FindAll(p => p.Id != id);
 
-                Response.Cookies.Append("basket", JsonConvert.SerializeObject(productsNew));
+                Response.Cookies.Append($"basket{username}", JsonConvert.SerializeObject(productsNew));
 
                 foreach (BasketVM pr in productsNew)
                 {
@@ -177,7 +213,7 @@ namespace FrontToBack.Controllers
 
                 return Ok(obje);
             }
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions 
+            Response.Cookies.Append($"basket{username}", JsonConvert.SerializeObject(products), new CookieOptions 
             { 
                 MaxAge = TimeSpan.FromDays(100)
             });
@@ -200,14 +236,23 @@ namespace FrontToBack.Controllers
         }
         public IActionResult Plus(int? id)
         {
+            string username = "";
+            if (!User.Identity.IsAuthenticated)
+            {
+               return RedirectToAction("login", "account");
+            }
+            else
+            {
+                username = User.Identity.Name;
+            }
             if (id == null) return NotFound();
-            string basket = Request.Cookies["basket"];
+            string basket = Request.Cookies[$"basket{username}"];
             List<BasketVM> products;
             products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
             BasketVM dbproducts = products.Find(p => p.Id == id);
             if (dbproducts == null) return NotFound();
             dbproducts.ProductCount++;
-            Response.Cookies.Append("basket", JsonConvert.SerializeObject(products), new CookieOptions 
+            Response.Cookies.Append($"basket{username}", JsonConvert.SerializeObject(products), new CookieOptions 
             {
                 MaxAge = TimeSpan.FromDays(100) 
             });
@@ -235,13 +280,22 @@ namespace FrontToBack.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Sale()
         {
+            string username="";
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("login", "account");
+            }
+            else
+            {
+                username = User.Identity.Name;   
+            }
             if (User.Identity.IsAuthenticated)
             {
                 AppUser user = await _usermanager.FindByNameAsync(User.Identity.Name);
                 Sale sale = new Sale();
                 sale.SaleDate = DateTime.Now;
                 sale.AppUserId = user.Id;
-                List<BasketVM> basket = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies["basket"]);
+                List<BasketVM> basket = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies[$"basket{username}"]);
                 List<SalesProduct> salesProducts = new List<SalesProduct>();
                 double Total = 0;
                 foreach (var baskepProducts in basket)
@@ -262,6 +316,7 @@ namespace FrontToBack.Controllers
                     dbProduct.Count -= baskepProducts.ProductCount;
                 }
                 sale.SalesProducts = salesProducts;
+                sale.Total=Total;
                 await _context.AddAsync(sale);
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Purchase succesfull";
