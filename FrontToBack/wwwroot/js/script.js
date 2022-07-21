@@ -31,8 +31,14 @@ $(document).ready(function () {
             axios.post("/basket/additem?id=" + dataId)
                 .then(function (response) {
                     // handle success
-                    bTotal.innerHTML = response.data.count
-                    tPrice.innerHTML = ` $${response.data.price}`
+                    if (response.data.online) {
+
+                        bTotal.innerHTML = response.data.count
+                        tPrice.innerHTML = ` $${response.data.price}`
+                    }
+                    else {
+                        window.location.href = "account/login"
+                    }
                     //console.log(response);
                 })
                 .catch(function (error) {

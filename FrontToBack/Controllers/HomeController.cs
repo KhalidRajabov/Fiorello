@@ -1,4 +1,5 @@
 ﻿using FrontToBack.Models;
+using FrontToBack.Services;
 using FrontToBack.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,12 @@ namespace FrontToBack.Controllers
     public class HomeController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ISum _sum;
 
-        public HomeController(AppDbContext context)
+        public HomeController(AppDbContext context, ISum sum)
         {
             _context = context;
+            _sum = sum;
         }
 
         

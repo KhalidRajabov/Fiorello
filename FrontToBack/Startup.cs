@@ -1,5 +1,6 @@
 using FrontToBack.Helper;
 using FrontToBack.Models;
+using FrontToBack.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,8 @@ namespace FrontToBack
             {
                 option.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddScoped<ISum, SumService>();
 
             services.AddSession(opt =>
             {

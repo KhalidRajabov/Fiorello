@@ -1,5 +1,6 @@
 ﻿using FrontToBack.Models;
 using FrontToBack.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,17 +30,20 @@ namespace FrontToBack.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public async Task<IActionResult> AddItem(int? id)
         {
             string username="";
+            bool online = false;
             if (!User.Identity.IsAuthenticated)
             {
                return RedirectToAction("login", "account");
+                online = false;
             }
             else
             {
                 username = User.Identity.Name;   
+                online = true;
             }
             if (id == null)
             if (id==null)return NotFound();
@@ -85,6 +89,7 @@ namespace FrontToBack.Controllers
             {
                 Price = price,
                 Count = count,
+                online = online
             };
             //obj data-id ile baghlidir. response "obj" obyektidir,
             //Ok'in icnde return edilmelidir ki API'de response gorsun

@@ -21,6 +21,11 @@ namespace FrontToBack.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            string username = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                username = User.Identity.Name;
+            }
             ViewBag.UserId = "";
             ViewBag.UserRole = "";
             ViewBag.User = "Login";
@@ -43,7 +48,7 @@ namespace FrontToBack.ViewComponents
             ViewBag.TotalPrice = 0;
             int TotalCount = 0;
             double TotalPrice = 0;
-            string basket = Request.Cookies["basket"];
+            string basket = Request.Cookies[$"basket{username}"];
             if (basket!=null)
             {
                 List<BasketVM> products = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
